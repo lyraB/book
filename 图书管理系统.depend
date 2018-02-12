@@ -1,0 +1,37 @@
+# depslib dependency file v1.0
+1518433505 source:e:\编程\图书管理系统\main.cpp
+	<iostream>
+	"Service_h.h"
+
+1518415407 source:e:\编程\图书管理系统\user.cpp
+	"User_h.h"
+
+1518415407 e:\编程\图书管理系统\user_h.h
+	<string>
+
+1518436663 source:e:\编程\图书管理系统\io.cpp
+	<iostream>
+	<fstream>
+	<vector>
+	<string>
+	"io_h.h"
+	"User_h.h"
+
+1518360827 e:\编程\图书管理系统\io_h.h
+	<vector>
+	"User_h.h"
+	<string>
+
+1518359588 source:e:\编程\图书管理系统\interface.cpp
+	<iostream>
+	<stdlib.h>
+
+1518410388 source:e:\编程\图书管理系统\service.cpp
+	<iostream>
+	<stdlib.h>
+	"io_h.h"
+	"Service_h.h"
+
+1518360758 e:\编程\图书管理系统\service_h.h
+	"io_h.h"
+

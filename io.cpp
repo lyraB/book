@@ -547,19 +547,6 @@ void Borrowio::seekrt_byreader(string id_reader,int time_now)
     if(i)
         cout<<"无未还信息"<<endl;
 }
-Borrow Borrowio::get_bybook(string id)
-{
-    vector<Borrow>::iterator itor=borrio.begin();
-    for (;itor!=borrio.end();itor++)
-    {
-        if(itor->get_id_book()==id)
-        {
-            return *itor;
-        }
-    }
-    Borrow wrong;
-    return wrong;
-}
 Borrow Borrowio::get_byreader(string id)
 {
     vector<Borrow>::iterator itor=borrio.begin();

@@ -36,8 +36,8 @@ public:
     bool borrow_book(string);
     bool return_book(string);
     bool dele_book();
-    void show_book();
-    void show_borrow();
-    void check();
+    bool show_book();
+    bool show_borrow(string);
+    void check_bybook();
 };
 #endif // SERVICE_H_H_INCLUDED

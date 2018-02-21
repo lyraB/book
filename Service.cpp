@@ -296,8 +296,8 @@ bool Book_serv::borrow_book(string id_reader)
     cin>>id_book;
     Data d1(time(0));
     Data d2(time(0)+5184000);
-    bookio.input();
     Borrow borrow(id_book,id_reader,d1.show(),d2.show(),"未还",time(0));
+    bookio.input();
     borrowio.input();
     if(bookio.change(id_book,"已借出")&&borrowio.add(borrow))
     {
@@ -367,53 +367,67 @@ bool Book_serv::dele_book()
     system("pause");
     return false;
 }
-bool Book_serv::show()
+bool Book_serv::show_book()
 {
     system("cls");
     string variable;
     Book book;
     int choice;
-    do
+    if(bookio.input())
     {
-        cout<<"1.按书籍编号查找"<<endl
-             <<"2.按书籍名称查找"<<endl
-             <<"3.退出"<<endl;
-        cin>>choice;
-        switch(choice)
+        do
         {
-        case 1:
-            cout<<"输入待查询书籍编号：";
-            cin>>variable;
-            if(bookio.input())
+            cout<<"1.按书籍编号查找"<<endl
+                 <<"2.按书籍名称查找"<<endl
+                 <<"3.退出"<<endl;
+            cin>>choice;
+            switch(choice)
             {
+            case 1:
+                cout<<"输入待查询书籍编号：";
+                cin>>variable;
                 book=bookio.get_book_id(variable);
                 book.out();
                 system("pause");
-                return true;
-            }
-            else
-                return false;
-            break;
-        case 2:
-            cout<<"输入待查找书籍名称：";
-            cin>>variable;
-            if(bookio.input())
-            {
+                break;
+            case 2:
+                cout<<"输入待查找书籍名称：";
+                cin>>variable;
                 book=bookio.get_book_id(variable);
                 book.out();
                 system("pause");
-                return true;
+                break;
+            case 3:
+                break;
+            default:
+                cerr<<"输入错误！"<<endl;
             }
-            else
-                return false;
-            break;
-        case 3:
-            break;
-        default:
-            cerr<<"输入错误！"<<endl;
         }
+        while(choice!=3);
+        return true;
     }
-    while(choice!=3);
+    return false;
+}
+bool Book_serv::show_borrow(string id_reader)
+{
+    system("cls");
+    if(borrowio.input())
+    {
+        Borrow borrow;
+        borrow=borrowio.get_byreader(id_reader);
+        borrow.out();
+        system("pause");
+        return true;
+    }
+    return false;
+}
+void Book_serv::check_bybook()
+{
+    string id;
+    cout<<"输入书籍编号"<<endl;
+    cin>>id;
+    borrowio.input();
+    borrowio.seekrt_bybook(id,time(0));
 }
 bool Borrow_serv::add()
 {

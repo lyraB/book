@@ -68,7 +68,6 @@ public:
     bool return_book(string,string,string);
     void seekrt_bybook(string,int);
     void seekrt_byreader(string,int);
-    Borrow get_bybook(string);
     Borrow get_byreader(string);
 };
 #endif // IO_H_H_INCLUDED

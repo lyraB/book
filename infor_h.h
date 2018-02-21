@@ -33,8 +33,6 @@ public:
     string get_data_back(){return data_back;}
     string get_data_return(){return data_return;}
     int get_time(){return borrow_time;}
-    void set_id_book(string id){this->id_book = id;}
-    void set_id_reader(string id){this->id_reader = id;}
     void set_data_return(string data){this->data_return = data;}
     void out();
     string get_string(){return id_book+" "+id_reader+" "+data_borrow+" "+data_back+" "+data_return+" ";}

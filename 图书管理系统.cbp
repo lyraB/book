@@ -27,6 +27,10 @@
 		<Unit filename="Service_h.h" />
 		<Unit filename="User.cpp" />
 		<Unit filename="User_h.h" />
+		<Unit filename="data.cpp" />
+		<Unit filename="data_h.h" />
+		<Unit filename="infor.cpp" />
+		<Unit filename="infor_h.h" />
 		<Unit filename="interface.cpp" />
 		<Unit filename="interface_h.h" />
 		<Unit filename="io.cpp" />

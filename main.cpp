@@ -3,7 +3,7 @@
 using namespace std;
 int main()
 {
-    Librarian_serv lv;
-    lv.add();
+    Reader_serv r;
+    r.change();
     return 0;
 }

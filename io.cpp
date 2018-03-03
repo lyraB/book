@@ -73,12 +73,8 @@ bool Userio::change(string id,User user)
             {
                itor->set_password(user.get_password());
             }
-            if(user.get_type()!="no")
-            {
-               itor->set_type(user.get_type());
-            }
+            return true;
         }
-        return true;
     }
     return false;
 }
@@ -94,6 +90,19 @@ bool Userio::dele(string id)
         }
     }
     return false;
+}
+User Userio::get_user(string id)
+{
+    vector<User>::iterator itor=userio.begin();
+    for (;itor!=userio.end();itor++)
+    {
+        if(itor->get_id()==id)
+        {
+            return *itor;
+        }
+    }
+    User wrong;
+    return wrong;
 }
 
 //Librarian 的 文件 读写
@@ -387,19 +396,19 @@ bool Bookio::change(string id,string status)
     {
         if(itor->get_id()==id)
         {
-            if(itor->get_status() == "已借出"&&status == "已借出")
+            if(itor->get_status()=="outcirculation"&&status=="outcirculation")
             {
-                cout<<"已借出"<<endl;
+                cout<<"The book has been borrowed."<<endl;
                 return false;
             }
-            if(itor->get_status() == "暂不外借"&&status == "已借出")
+            if(itor->get_status() == "notforcirculation"&&status == "outcirculation")
             {
-                cout<<"暂不外借"<<endl;
+                cout<<"The book is not for circulation now."<<endl;
                 return false;
             }
-            if(itor->get_status() == "已借出"&&status == "未借出")
+            if(itor->get_status() == "incirculation"&&status == "incirculation")
             {
-                cout<<"书籍已在库"<<endl;
+                cout<<"The book has been returned."<<endl;
                 return false;
             }
             itor->set_status(status);
@@ -475,7 +484,7 @@ bool Borrowio::output()
     fstream outfile("Borrow.txt",ios::out);
     if(!outfile.good())
     {
-        cerr<<"打开错误!"<<endl;
+        cerr<<"Wrong Open!"<<endl;
         return false;
     }
     vector<Borrow>::iterator itor=borrio.begin();
@@ -503,7 +512,8 @@ bool Borrowio::return_book(string id_book,string id_reader,string data)
         {
             if(itor->get_id_reader()==id_reader)
             {
-                if(itor->get_data_return()=="未还")
+                cout<<itor->get_data_return()<<endl;
+                if(itor->get_data_return()=="notreturned")
                 {
                     itor->set_data_return(data);
                     return true;

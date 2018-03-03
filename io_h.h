@@ -16,6 +16,7 @@ public:
     bool add(User);
     bool change(string,User);
     bool dele(string);
+    User get_user(string);
 };
 //Librarian ÎÄ¼þ¶ÁÐ´
 class Librario:public Userio

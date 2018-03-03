@@ -1,7 +1,7 @@
 # depslib dependency file v1.0
-1519055112 source:e:\编程\图书管理系统\main.cpp
+1519455267 source:e:\编程\图书管理系统\main.cpp
 	<iostream>
-	"Service_h.h"
+	"interface_h.h"
 
 1519053553 source:e:\编程\图书管理系统\user.cpp
 	"User_h.h"
@@ -10,7 +10,7 @@
 1519053556 e:\编程\图书管理系统\user_h.h
 	<string>
 
-1519206755 source:e:\编程\图书管理系统\io.cpp
+1519465925 source:e:\编程\图书管理系统\io.cpp
 	<iostream>
 	<fstream>
 	<vector>
@@ -18,26 +18,30 @@
 	"io_h.h"
 	"User_h.h"
 
-1519206755 e:\编程\图书管理系统\io_h.h
+1519291455 e:\编程\图书管理系统\io_h.h
 	<vector>
 	"User_h.h"
 	"infor_h.h"
 	<string>
 
-1518359588 source:e:\编程\图书管理系统\interface.cpp
+1519465691 source:e:\编程\图书管理系统\interface.cpp
 	<iostream>
+	"Service_h.h"
 	<stdlib.h>
+	"interface_h.h"
 
-1519053579 source:e:\编程\图书管理系统\service.cpp
+1519465568 source:e:\编程\图书管理系统\service.cpp
 	<iostream>
 	<stdlib.h>
 	<string>
 	<ctime>
+	<cstring>
+	<conio.h>
 	"io_h.h"
 	"Service_h.h"
 	"data_h.h"
 
-1519209216 e:\编程\图书管理系统\service_h.h
+1519454990 e:\编程\图书管理系统\service_h.h
 	"io_h.h"
 
 1518686266 source:e:\编程\图书管理系统\data.cpp
@@ -50,11 +54,14 @@
 1518669602 e:\编程\图书管理系统\data_h.h
 	<string>
 
-1519200198 source:e:\编程\图书管理系统\infor.cpp
+1519460091 source:e:\编程\图书管理系统\infor.cpp
 	<iostream>
 	<string>
 	"infor_h.h"
 
 1519206755 e:\编程\图书管理系统\infor_h.h
 	<string>
+
+1519445486 e:\编程\图书管理系统\interface_h.h
+	"Service_h.h"
 

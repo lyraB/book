@@ -8,7 +8,7 @@ Book::Book()
     name = "no";
     publisher = "no";
     price = "no";
-    status = "‘›≤ªÕ‚ΩË";
+    status = "incirculation";
 }
 Book::Book(string id,string name,string publisher,string price,string status)
 {
@@ -32,7 +32,7 @@ Borrow::Borrow()
     id_reader = "no";
     data_borrow = "no";
     data_back = "no";
-    data_return = "Œ¥ªπ";
+    data_return = "notreturned";
     borrow_time = 0;
 }
 Borrow::Borrow(string id_book,string id_reader,string data_borrow,string data_back,string data_return,int time)

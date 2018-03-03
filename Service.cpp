@@ -2,11 +2,148 @@
 #include <stdlib.h>
 #include <string>
 #include <ctime>
+#include <cstring>
+#include<conio.h>
 #include "io_h.h"
 #include "Service_h.h"
 #include "data_h.h"
 using namespace std;
-
+string cin_pass()
+{
+     int index=0;
+     char password[20];
+     while(1)
+     {
+         char ch;
+         ch=getch();
+         if(ch==8) //退格
+         {
+            if(index!=0)
+            {
+               cout<<char(8)<<" "<<char(8);
+               index--;
+            }
+         }
+         else if(ch=='\r') //回车键
+         {
+            password[index]='\0';
+            cout<<endl;
+            break;
+        }
+         else
+         {
+              cout<<"*";
+              password[index++]=ch;
+         }
+     }
+     string p = password;
+     return p;
+}
+bool User_serv::add()
+{
+    string id,name,password;
+    cout<<"请输入编号：";
+    cin>>id;
+    cout<<"请输入姓名：";
+    cin>>name;
+    cout<<"请输入密码：";
+    cin>>password;
+    User user(id,name,password,"no");
+    userio.input();
+    if( userio.add(user))
+    {
+        if(userio.output())
+        {
+            cout<<"添加成功"<<endl;
+            system("pause");
+            return true;
+        }
+        else
+        {
+            cerr<<"保存信息到文件失败"<<endl;
+        }
+    }
+    cerr<<"添加失败"<<endl;
+    system("pause");
+    return false;
+}
+string User_serv::signin(string id)
+{
+    string password;
+    User user;
+    userio.input();
+    user = userio.get_user(id);
+    if(user.get_id()!="no")
+    {
+        do
+        {
+            cout<<"输入您的密码：";
+            password = cin_pass();
+            if(user.get_password()==password)
+            {
+                cout<<"登录成功！"<<endl;
+                return user.get_type();
+            }
+            else
+                cout<<"密码错误！"<<endl;
+        }
+        while(password!=user.get_password());
+    }
+    else
+        cout<<"账号错误！"<<endl;
+    cout<<"登录失败！"<<endl;
+    return "Wrong！";
+}
+bool User_serv::change(string id)
+{
+    system("cls");
+    string name,password;
+    int choice;
+    userio.input();
+    User user=userio.get_user(id);
+    do
+    {
+        cout<<"请选择修改内容："<<endl
+          <<"1.姓名"<<endl
+          <<"2.密码"<<endl
+          <<"3.退出"<<endl;
+        cin>>choice;
+        switch(choice)
+        {
+        case 1:
+            cout<<"姓名：";
+            cin>>name;
+            user.set_name(name);
+            break;
+        case 2:
+            cout<<"密码：";
+            cin>>password;
+            user.set_password(password);
+            break;
+        case 3:
+            break;
+        default:
+            cerr<<"输入错误！"<<endl;
+        }
+    }
+    while(choice!=3);
+    if(userio.change(id,user))
+    {
+        if(userio.output())
+        {
+            cout<<"修改成功"<<endl;
+            system("pause");
+            return true;
+        }
+        else
+        {
+            cerr<<"文件再写入失败！"<<endl;
+        }
+    }
+    cerr<<"修改失败！"<<endl;
+    system("pause");
+    return false;
+}
 bool Librarian_serv::add()
 {
     string id,name,seniority,wage;
@@ -37,13 +174,11 @@ bool Librarian_serv::add()
     system("pause");
     return false;
 }
-bool Librarian_serv::change()
+bool Librarian_serv::change(string id)
 {
-    system("cls");
-    string id,name,wage,seniority;
+    //system("cls");
+    string name,wage,seniority;
     int choice;
-    cout<<"请输入你要修改的人员id：";
-    cin>>id;
     librario.input();
     Librarian librarian=librario.get_librarian(id);
     do
@@ -95,9 +230,36 @@ bool Librarian_serv::change()
     system("pause");
     return false;
 }
+bool Librarian_serv::change_pass(string id)
+{
+    string password;
+    cout<<"输入新密码："<<endl;
+    password = cin_pass();
+    Librarian l;
+    cout<<password<<endl;
+    l.set_password(password);
+    librario.input();
+    if(librario.change(id,l))
+    {
+        if(librario.output())
+        {
+            cout<<"修改成功"<<endl;
+            system("pause");
+            return true;
+        }
+        else
+        {
+            cerr<<"文件再写入失败！"<<endl;
+        }
+    }
+    cerr<<"修改失败！"<<endl;
+    system("pause");
+    return false;
+
+}
 bool Librarian_serv::dele()
 {
-    system("cls");
+    //system("cls");
     string id;
     cout<<"请输入要删除的工作人员编号:";
     cin>>id;
@@ -119,12 +281,9 @@ bool Librarian_serv::dele()
     system("pause");
     return false;
 }
-bool Librarian_serv::show()
+bool Librarian_serv::show(string id)
 {
-    system("cls");
-    string id;
-    cout<<"输入待查询人员工号：";
-    cin>>id;
+    //system("cls");
     if(librario.input())
     {
         Librarian l=librario.get_librarian(id);
@@ -135,7 +294,46 @@ bool Librarian_serv::show()
     else
         return false;
 }
-
+void Librarian_serv::face_ad()
+{
+    string id;
+    int choice;
+    do
+    {
+        system("cls");
+        cout<<"1.工作人员信息录入"<<endl
+             <<"2.工作人员信息删除"<<endl
+             <<"3.工作人员信息修改"<<endl
+             <<"4.工作人员信息查询"<<endl
+             <<"5.退出"<<endl;
+        cin>>choice;
+        system("cls");
+        switch(choice)
+        {
+        case 1:
+            add();
+            break;
+        case 2:
+            dele();
+            break;
+        case 3:
+            cout<<"请输入你要修改的人员id：";
+            cin>>id;
+            change(id);
+            break;
+        case 4:
+            cout<<"输入待查询人员工号：";
+            cin>>id;
+            show(id);
+            break;
+        case 5:
+            break;
+        default:
+            cerr<<"输入错误！"<<endl;
+        }
+    }
+    while(choice!=5);
+}
 bool Reader_serv::add()
 {
     string id,name,sex,reader_id;
@@ -166,13 +364,11 @@ bool Reader_serv::add()
     system("pause");
     return false;
 }
-bool Reader_serv::change()
+bool Reader_serv::change(string id)
 {
-    system("cls");
-    string id,name,sex,reader_id;
+    //system("cls");
+    string name,sex,reader_id;
     int choice;
-    cout<<"请输入你要修改的人员id：";
-    cin>>id;
     readerio.input();
     Reader reader=readerio.get_reader(id);
     do
@@ -224,9 +420,35 @@ bool Reader_serv::change()
     system("pause");
     return false;
 }
+bool Reader_serv::change_pass(string id)
+{
+
+    string password;
+    cout<<"输入新密码："<<endl;
+    password = cin_pass();
+    Reader r;
+    r.set_password(password);
+    readerio.input();
+    if(readerio.change(id,r))
+    {
+        if(readerio.output())
+        {
+            cout<<"修改成功"<<endl;
+            system("pause");
+            return true;
+        }
+        else
+        {
+            cerr<<"文件再写入失败！"<<endl;
+        }
+    }
+    cerr<<"修改失败！"<<endl;
+    system("pause");
+    return false;
+}
 bool Reader_serv::dele()
 {
-    system("cls");
+    //system("cls");
     string id;
     cout<<"请输入要删除的工作人员编号:";
     cin>>id;
@@ -248,12 +470,9 @@ bool Reader_serv::dele()
     system("pause");
     return false;
 }
-bool Reader_serv::show()
+bool Reader_serv::show(string id)
 {
-    system("cls");
-    string id;
-    cout<<"输入待查询人员工号：";
-    cin>>id;
+    //system("cls");
     if(readerio.input())
     {
         Reader reader=readerio.get_reader(id);
@@ -264,7 +483,46 @@ bool Reader_serv::show()
     else
         return false;
 }
-
+void Reader_serv::face_ad()
+{
+    string id;
+    int choice;
+    do
+    {
+        system("cls");
+        cout<<"1.读者信息录入"<<endl
+             <<"2.读者信息删除"<<endl
+             <<"3.读者信息修改"<<endl
+             <<"4.读者信息查询"<<endl
+             <<"5.退出"<<endl;
+        cin>>choice;
+        system("cls");
+        switch(choice)
+        {
+        case 1:
+            add();
+            break;
+        case 2:
+            dele();
+            break;
+        case 3:
+            cout<<"请输入你要修改的读者编号：";
+            cin>>id;
+            change(id);
+            break;
+        case 4:
+            cout<<"输入待查询读者编号：";
+            cin>>id;
+            show(id);
+            break;
+        case 5:
+            break;
+        default:
+            cerr<<"输入错误！"<<endl;
+        }
+    }
+    while(choice!=5);
+}
 bool Book_serv::add()
 {
     string id,name,publisher,price;
@@ -276,7 +534,7 @@ bool Book_serv::add()
     cin>>publisher;
     cout<<"请输入价格：";
     cin>>price;
-    Book book(id,name,publisher,price,"暂不外借");
+    Book book(id,name,publisher,price,"incirculation");
     bookio.input();
     if(bookio.add(book))
     {
@@ -296,10 +554,10 @@ bool Book_serv::borrow_book(string id_reader)
     cin>>id_book;
     Data d1(time(0));
     Data d2(time(0)+5184000);
-    Borrow borrow(id_book,id_reader,d1.show(),d2.show(),"未还",time(0));
+    Borrow borrow(id_book,id_reader,d1.show(),d2.show(),"notreturned",time(0));
     bookio.input();
     borrowio.input();
-    if(bookio.change(id_book,"已借出")&&borrowio.add(borrow))
+    if(bookio.change(id_book,"outcirculation")&&borrowio.add(borrow))
     {
         if(bookio.output()&&borrowio.output())
         {
@@ -318,14 +576,14 @@ bool Book_serv::borrow_book(string id_reader)
 }
 bool Book_serv::return_book(string id_reader)
 {
-    system("cls");
+    //system("cls");
     string id_book;
     cout<<"请输入图书编号：";
     cin>>id_book;
     Data d1(time(0));
     bookio.input();
     borrowio.input();
-    if(bookio.change(id_book,"未借出")&&borrowio.return_book(id_book,id_reader,d1.show()))
+    if(bookio.change(id_book,"incirculation")&&borrowio.return_book(id_book,id_reader,d1.show()))
     {
         if(bookio.output()&&borrowio.output())
         {
@@ -339,13 +597,35 @@ bool Book_serv::return_book(string id_reader)
             return false;
         }
     }
-    cerr<<"还书失败"<<endl;
+    else
+        cerr<<"还书失败"<<endl;
+    system("pause");
+    return false;
+}
+bool Book_serv::repair_book(string id)
+{
+    bookio.input();
+    if(bookio.change(id,"notforcirculation"))
+    {
+        if(bookio.output()&&borrowio.output())
+        {
+            cout<<"出库成功"<<endl;
+            system("pause");
+            return true;
+        }
+        else
+        {
+            cerr<<"文件再写入失败！"<<endl;
+            return false;
+        }
+    }
+    cerr<<"出库失败"<<endl;
     system("pause");
     return false;
 }
 bool Book_serv::dele_book()
 {
-    system("cls");
+    //system("cls");
     string id;
     cout<<"请输入要删除的书籍编号:";
     cin>>id;
@@ -369,7 +649,7 @@ bool Book_serv::dele_book()
 }
 bool Book_serv::show_book()
 {
-    system("cls");
+    //system("cls");
     string variable;
     Book book;
     int choice;
@@ -393,7 +673,7 @@ bool Book_serv::show_book()
             case 2:
                 cout<<"输入待查找书籍名称：";
                 cin>>variable;
-                book=bookio.get_book_id(variable);
+                book=bookio.get_book_name(variable);
                 book.out();
                 system("pause");
                 break;
@@ -410,7 +690,7 @@ bool Book_serv::show_book()
 }
 bool Book_serv::show_borrow(string id_reader)
 {
-    system("cls");
+    //system("cls");
     if(borrowio.input())
     {
         Borrow borrow;
@@ -429,65 +709,101 @@ void Book_serv::check_bybook()
     borrowio.input();
     borrowio.seekrt_bybook(id,time(0));
 }
-bool Borrow_serv::add()
+void Book_serv::check_byreader(string id)
 {
-    string id_book,id_reader,data_borrow,data_back,data_return;
-    cout<<"请输入书籍编号：";
-    cin>>id_book;
-    cout<<"请输入读者编号：";
-    cin>>id_reader;
-    Data d1(time(0));
-    Data d2(time(0)+5184000);
-    Borrow borrow(id_book,id_reader,d1.show(),d2.show(),"未还",time(0));
     borrowio.input();
-    if( borrowio.add(borrow))
-    {
-        if(borrowio.output())
-        {
-            cout<<"借书成功"<<endl;
-            system("pause");
-            return true;
-        }
-        else
-        {
-            cerr<<"保存信息到文件失败"<<endl;
-        }
-    }
-    cerr<<"借书失败"<<endl;
-    system("pause");
-    return false;
+    borrowio.seekrt_byreader(id,time(0));
 }
-bool Borrow_serv::back()
+void Book_serv::face_ad()
 {
-    system("cls");
-    string id_book,id_reader;
-    cout<<"请输入图书编号：";
-    cin>>id_book;
-    cout<<"请输入读者编号：";
-    cin>>id_reader;
-    Data d1(time(0));
-    borrowio.input();
-    if(borrowio.return_book(id_book,id_reader,d1.show()))
+    string id;
+    int choice;
+    do
     {
-        if(borrowio.output())
+        system("cls");
+        cout<<"1.图书信息录入"<<endl
+             <<"2.删除图书"<<endl
+             <<"3.图书维修"<<endl
+             <<"4.退出"<<endl;
+        cin>>choice;
+        system("cls");
+        switch(choice)
         {
-            if(status == "out circulation")
-                cout<<"借阅成功"<<endl;
-            else if (status == "in circulation")
-                cout<<"还书成功"<<endl;
-            system("pause");
-            return true;
+        case 1:
+            add();
+            break;
+        case 2:
+            dele_book();
+            break;
+        case 3:
+            cout<<"输入需要维修的书籍编号："<<endl;
+            cin>>id;
+            repair_book(id);
+            break;
+        case 4:
+            break;
+        default:
+            cerr<<"输入错误！"<<endl;
         }
-        else
-            cerr<<"文件再写入失败！"<<endl;
+        system("pause");
     }
-    else
+    while(choice!=4);
+}
+void Book_serv::face_li()
+{
+    string id;
+    int choice1,choice2;
+    do
     {
-        if(status == "out circulation")
-            cerr<<"借阅失败"<<endl;
-        else if (status == "in circulation")
-            cerr<<"还书失败"<<endl;
+        system("cls");
+        cout<<"1.查询图书信息"<<endl
+             <<"2.查询到期未还信息"<<endl
+             <<"3.图书维修"<<endl
+             <<"4.退出"<<endl;
+        cin>>choice1;
+        system("cls");
+        switch(choice1)
+        {
+        case 1:
+            show_book();
+            break;
+        case 2:
+            do
+            {
+                cout<<"1.按照图书编号查询"<<endl
+                     <<"2.按照读者编号查询"<<endl
+                     <<"3.退出"<<endl;
+                cin>>choice2;
+                 system("cls");
+                switch(choice2)
+                {
+                case 1:
+                    check_bybook();
+                    break;
+                case 2:
+                    cout<<"输入读书编号"<<endl;
+                    cin>>id;
+                    check_byreader(id);
+                    break;
+                case 3:
+                    break;
+                default:
+                    cerr<<"输入错误！"<<endl;
+                }
+            }
+            while(choice2!=3);
+            break;
+        case 3:
+            cout<<"输入需要维修的书籍编号："<<endl;
+            cin>>id;
+            repair_book(id);
+            break;
+        case 4:
+            break;
+        default:
+            cerr<<"输入错误！"<<endl;
+        }
+        system("pause");
     }
-    system("pause");
-    return false;
+    while(choice1!=4);
 }
